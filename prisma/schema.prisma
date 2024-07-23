@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @unique @default(uuid())
+  fullname  String
+  clerkId   String   @unique
+  type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  domains Domain[]
+
+  stripeId     String?
+  subscription Billings?
+}
+
+model Billings {
+  id      String  @id @default(uuid())
+  plan    Plans   @default(STANDARD)
+  credits Int     @default(10)
+  userId  String? @unique
+  User    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Domain {
+  id   String @id @unique @default(uuid())
+  name String
+  icon String
+
+  chatBot         ChatBot?
+  helpDesk        HelpDesk[]
+  filterQuestions FilterQuestions[]
+  products        Product[]
+
+  userId   String
+  customer Customer[]
+  User     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Customer {
+  id    String @id @unique @default(uuid())
+  email String
+
+  questions CustomerResponses[]
+  chatRoom  ChatRoom[]
+  booking   Bookings[]
+  domainId  String
+  Domain    Domain?             @relation(fields: [domainId], references: [id], onDelete: Cascade)
+}
+
+model ChatBot {
+  id             String  @id @default(uuid())
+  welcomeMessage String?
+  icon           String?
+  backGround     String?
+  textColor      String?
+  helpdesk       Boolean @default(false)
+  domainId       String
+  Domain         Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
+
+  @@unique([domainId])
+}
+
+model HelpDesk {
+  id       String  @id @unique @default(uuid())
+  question String
+  answer   String
+  domainId String
+  Domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
+}
+
+model FilterQuestions {
+  id       String  @id @unique @default(uuid())
+  question String
+  answered String?
+  domainId String
+  Domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
+}
+
+model CustomerResponses {
+  id         String    @id @unique @default(uuid())
+  question   String
+  answered   String?
+  customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId String
+}
+
+model ChatRoom {
+  id         String    @id @default(uuid())
+  live       Boolean   @default(false)
+  mailed     Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  Customer   Customer? @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId String?
+
+  message ChatMessage[]
+}
+
+model ChatMessage {
+  id         String    @id @unique @default(uuid())
+  message    String
+  role       Role?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+  seen       Boolean   @default(false)
+  chatRoomId String?
+}
+
+model Bookings {
+  id   String   @id @unique @default(uuid())
+  date DateTime
+  slot String
+  emai String
+
+  Customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId String?
+
+  domainId  String?
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id        String   @id @unique @default(uuid())
+  name      String
+  price     String
+  image     String
+  createdAt DateTime @default(now())
+  Domain    Domain?  @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  domainId  String?
+}
+
+enum Plans {
+  STANDARD
+  PRO
+  ULTIMATE
+}
+
+enum Role {
+  user
+  assistant
+}
