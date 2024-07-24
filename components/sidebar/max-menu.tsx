@@ -21,7 +21,10 @@ type Props = {
 
 const MaxMenu = ({ onExpand, current, onSignOut, domains }: Props) => {
   return (
-    <div className="py-3 px-4 flex flex-col h-full">
+    <div
+      className="py-3 px-4 flex
+    flex-col h-full max-w-[270px]"
+    >
       <div className="flex justify-between items-center">
         <Image
           src="/images/corinna-ai-logo.png"

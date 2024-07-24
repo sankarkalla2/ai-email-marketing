@@ -47,7 +47,7 @@ model Domain {
 
   userId   String
   customer Customer[]
-  User     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Customer {
@@ -77,7 +77,7 @@ model ChatBot {
 model HelpDesk {
   id       String  @id @unique @default(uuid())
   question String
-  answer   String
+  answer   String  @db.Text
   domainId String
   Domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
 }
@@ -85,7 +85,7 @@ model HelpDesk {
 model FilterQuestions {
   id       String  @id @unique @default(uuid())
   question String
-  answered String?
+  answered String? @db.Text
   domainId String
   Domain   Domain? @relation(fields: [domainId], references: [id], onDelete: Cascade)
 }

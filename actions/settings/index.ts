@@ -356,3 +356,167 @@ export const onDeleteUserDomain = async (id: string) => {
     console.log(error);
   }
 };
+
+export const onCreateHelpDeskQuestions = async (
+  id: string,
+  question: string,
+  answer: string
+) => {
+  try {
+    const helpDeskQuesion = await db.domain.update({
+      where: {
+        id,
+      },
+      data: {
+        helpDesk: {
+          create: {
+            question,
+            answer,
+          },
+        },
+      },
+      include: {
+        helpDesk: {
+          select: {
+            id: true,
+            question: true,
+            answer: true,
+          },
+        },
+      },
+    });
+
+    if (helpDeskQuesion) {
+      return {
+        status: 200,
+        message: "New help question added",
+        questions: helpDeskQuesion.helpDesk,
+      };
+    }
+
+    return { status: 400, message: "OOps! something went wrong" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const onGetAllHelpDeskQuestions = async (id: string) => {
+  try {
+    const domainExists = await db.domain.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (domainExists) {
+      const questions = await db.domain.findUnique({
+        where: {
+          id: domainExists.id,
+        },
+        select: {
+          helpDesk: {
+            select: {
+              id: true,
+              question: true,
+              answer: true,
+            },
+          },
+        },
+      });
+
+      if (questions) {
+        return {
+          status: 200,
+          message: "Fetched successfully",
+          questions: questions.helpDesk,
+        };
+      }
+
+      return { status: 200, message: "not found" };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const onCreateFilteredQuestion = async (
+  id: string,
+  question: string,
+  answered?: string
+) => {
+  try {
+    const helpDeskQuesion = await db.domain.update({
+      where: {
+        id,
+      },
+      data: {
+        filterQuestions: {
+          create: {
+            question,
+            answered,
+          },
+        },
+      },
+      include: {
+        filterQuestions: {
+          select: {
+            id: true,
+            question: true,
+            answered: true,
+          },
+        },
+      },
+    });
+
+    if (helpDeskQuesion) {
+      return {
+        status: 200,
+        message: "New help question added",
+        questions: helpDeskQuesion.filterQuestions,
+      };
+    }
+
+    return { status: 400, message: "OOps! something went wrong" };
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const onGetAllFilteredQuestions = async (id: string) => {
+  try {
+    const domainExists = await db.domain.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (domainExists) {
+      const questions = await db.domain.findUnique({
+        where: {
+          id: domainExists.id,
+        },
+        select: {
+          filterQuestions: {
+            select: {
+              id: true,
+              question: true,
+              answered: true,
+            },
+          },
+        },
+      });
+
+      if (questions) {
+        return {
+          status: 200,
+          message: "Fetched successfully",
+          questions: questions.filterQuestions,
+        };
+      }
+
+      return { status: 200, message: "not found" };
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

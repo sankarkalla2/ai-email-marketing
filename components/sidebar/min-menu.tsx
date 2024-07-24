@@ -21,7 +21,7 @@ type Props = {
 
 const MinMenu = ({ onSignOut, current, domains, onShrink }: Props) => {
   return (
-    <div className="p-3 flex flex-col items-center h-full">
+    <div className="p-3 flex flex-col items-center h-full bg-slate-50 dark:bg-black">
       <span className="opacity-300 delay-300 fill-mode-forwards cursor-pointer">
         <MenuLogo onClick={onShrink} />
       </span>

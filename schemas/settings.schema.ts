@@ -64,3 +64,26 @@ export const DomainSettingsSchema = z
       path: ["image"],
     }
   );
+
+export type HelpDeskQuestionsProps = {
+  question: string;
+  answer: string;
+};
+
+export const HelpDeskQuestionsSchema = z.object({
+  question: z.string().min(1, { message: "Question cannot be left empty" }),
+  answer: z.string().min(1, { message: "Question cannot be left empty" }),
+});
+
+export type FilteredTypeQuestionsProps = {
+  question: string;
+  answer?: string;
+};
+
+export const FilteredTypeQuestionSchema = z.object({
+  question: z.string().min(1, { message: "Question cannot be left empty" }),
+  answer: z
+    .string()
+
+    .optional(),
+});

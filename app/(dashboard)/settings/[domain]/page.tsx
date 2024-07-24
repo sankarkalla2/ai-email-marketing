@@ -1,4 +1,5 @@
 import { onGetDomainInfo } from "@/actions/settings";
+import BotTrainingForm from "@/components/forms/settings/bot-training";
 import SettingsForm from "@/components/forms/settings/form";
 import InfoBar from "@/components/infotbar";
 import { redirect } from "next/navigation";
@@ -9,7 +10,6 @@ const DomainSettingsPage = async ({
   params: { domain: string };
 }) => {
   const domain = await onGetDomainInfo(params.domain);
-  console.log(domain);
 
   if (!domain) return redirect("/dashbaord");
 
@@ -22,6 +22,8 @@ const DomainSettingsPage = async ({
         id={domain.domains[0].id}
         name={domain.domains[0].name}
       />
+
+      <BotTrainingForm id={domain.domains[0].id} />
     </>
   );
 };
