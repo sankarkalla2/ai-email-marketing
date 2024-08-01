@@ -97,7 +97,7 @@ export const useChatBot = () => {
 
   useEffect(() => {
     window.addEventListener("message", (e) => {
-      console.log(e.data);
+      console.log(e.data)
       const botid = e.data;
       if (limitRequest < 1 && typeof botid == "string") {
         onGetDomainChatBot(botid);
@@ -122,7 +122,6 @@ export const useChatBot = () => {
         ]);
       }
 
-      console.log("🟡 RESPONSE FROM UC", uploaded.uuid);
       setOnAiTyping(true);
       const response = await onAiChatBotAssistant(
         currentBotId!,
@@ -132,6 +131,7 @@ export const useChatBot = () => {
       );
 
       if (response) {
+        console.log(response)
         setOnAiTyping(false);
         if (response.live) {
           setOnRealTime((prev) => ({

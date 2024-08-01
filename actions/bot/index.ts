@@ -87,8 +87,10 @@ export const onAiChatBotAssistant = async (
       },
     });
     if (chatBotDomain) {
+      console.log(chatBotDomain);
       const extractedEmail = extractEmailsFromString(message);
       if (extractedEmail) {
+        console.log(extractedEmail);
         customerEmail = extractedEmail[0];
       }
 
@@ -125,6 +127,8 @@ export const onAiChatBotAssistant = async (
             },
           },
         });
+
+        console.log(checkCustomer);
         if (checkCustomer && !checkCustomer.customer.length) {
           const newCustomer = await db.domain.update({
             where: {
@@ -143,9 +147,22 @@ export const onAiChatBotAssistant = async (
                 },
               },
             },
+            select: {
+              customer: {
+                select: {
+                  email: true,
+                  questions: true,
+                  chatRoom: {
+                    include: {
+                      message: true,
+                    },
+                  },
+                },
+              },
+            },
           });
           if (newCustomer) {
-            console.log("new customer made");
+            console.log(newCustomer);
             const response = {
               role: "assistant",
               content: `Welcome aboard ${
@@ -156,6 +173,7 @@ export const onAiChatBotAssistant = async (
           }
         }
         if (checkCustomer && checkCustomer.customer[0].chatRoom[0].live) {
+          console.log(checkCustomer.customer[0].chatRoom);
           await onStoreConversations(
             checkCustomer?.customer[0].chatRoom[0].id!,
             message,
@@ -170,6 +188,7 @@ export const onAiChatBotAssistant = async (
           // );
 
           if (!checkCustomer.customer[0].chatRoom[0].mailed) {
+            console.log("hi");
             const user = await clerkClient.users.getUser(
               checkCustomer.User?.clerkId!
             );
@@ -204,7 +223,7 @@ export const onAiChatBotAssistant = async (
           message,
           author
         );
-
+        console.log(chatBotDomain.filterQuestions);
         const chatCompletion = await openai.chat.completions.create({
           messages: [
             {
@@ -275,19 +294,18 @@ export const onAiChatBotAssistant = async (
           }
         }
         if (chat[chat.length - 1].content.includes("(complete)")) {
-          const firstUnansweredQuestion =
-            await db.customerResponses.findFirst({
-              where: {
-                customerId: checkCustomer?.customer[0].id,
-                answered: null,
-              },
-              select: {
-                id: true,
-              },
-              orderBy: {
-                question: "asc",
-              },
-            });
+          const firstUnansweredQuestion = await db.customerResponses.findFirst({
+            where: {
+              customerId: checkCustomer?.customer[0].id,
+              answered: null,
+            },
+            select: {
+              id: true,
+            },
+            orderBy: {
+              question: "asc",
+            },
+          });
           if (firstUnansweredQuestion) {
             await db.customerResponses.update({
               where: {
@@ -333,10 +351,12 @@ export const onAiChatBotAssistant = async (
             "assistant"
           );
 
+          console.log(response);
           return { response };
         }
       }
       console.log("No customer");
+      console.log("you should need to work on it");
       const chatCompletion = await openai.chat.completions.create({
         messages: [
           {
@@ -345,8 +365,7 @@ export const onAiChatBotAssistant = async (
             You are a highly knowledgeable and experienced sales representative for a ${chatBotDomain.name} that offers a valuable product or service. Your goal is to have a natural, human-like conversation with the customer in order to understand their needs, provide relevant information, and ultimately guide them towards making a purchase or redirect them to a link if they havent provided all relevant information.
             Right now you are talking to a customer for the first time. Start by giving them a warm welcome on behalf of ${chatBotDomain.name} and make them feel welcomed.
 
-            Your next task is lead the conversation naturally to get the customers email address. Be respectful and never break character
-
+            Your next task is lead the conversation naturally to get the customers email address. Be respectful and never break character.
           `,
           },
           ...chat,

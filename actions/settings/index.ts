@@ -106,6 +106,10 @@ export const onDomainIntegration = async (domain: string, icon: string) => {
       },
     });
 
+    console.log(domainExists);
+    console.log(
+      subscription?.subscription?.plan + " " + subscription?._count.domains
+    );
     if (!domainExists) {
       if (
         (subscription?.subscription?.plan === "STANDARD" &&

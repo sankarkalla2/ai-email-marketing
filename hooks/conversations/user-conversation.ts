@@ -43,6 +43,8 @@ export const useConversation = () => {
       try {
         const rooms = await onGetDomainChatRooms(value.domain!);
         if (rooms) {
+          setChatRooms(rooms.customer);
+          console.log(rooms);
           setLoading(false);
         }
       } catch (error) {
@@ -50,7 +52,7 @@ export const useConversation = () => {
       }
     });
 
-    return search.unsubscribe();
+    return () => search.unsubscribe();
   }, [watch]);
 
   const onGetActiveChatMessages = async (id: string) => {

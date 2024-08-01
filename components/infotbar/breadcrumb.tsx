@@ -18,7 +18,7 @@ const BreadCrumb = () => {
         <h2 className="text-3xl font-bold capitalize">{page}</h2>
         {page == "conversation" && chatRoom && (
           <Loader classname="p-0 inline" loading={loading}>
-            switch
+            {realtime ? "Realtime" : "ai mode"}
           </Loader>
         )}
       </div>

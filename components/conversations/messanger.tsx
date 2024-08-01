@@ -19,6 +19,9 @@ function Messanger({}: Props) {
     register,
   } = useChatWindow();
 
+  console.log(chatRoom)
+  console.log(chats)
+
   return (
     <div className="flex-1 flex flex-col h-0 relative">
       <div className="flex-1 h-0 w-full flex flex-col">

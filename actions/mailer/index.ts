@@ -16,7 +16,7 @@ export const onMailer = (email: string) => {
   const mailOptions = {
     to: email,
     subject: "RealTime Support",
-    text: "On of you customers on Corrina, just switched to realtime mode",
+    text: `<link href={http://localhost:3000/conversations}> click here to for demo </link>`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
