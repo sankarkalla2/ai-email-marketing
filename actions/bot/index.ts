@@ -77,9 +77,6 @@ export const onAiChatBotAssistant = async (
       select: {
         name: true,
         filterQuestions: {
-          where: {
-            answered: null,
-          },
           select: {
             question: true,
           },
@@ -130,6 +127,7 @@ export const onAiChatBotAssistant = async (
 
         console.log(checkCustomer);
         if (checkCustomer && !checkCustomer.customer.length) {
+          //for new customer
           const newCustomer = await db.domain.update({
             where: {
               id,
@@ -141,6 +139,7 @@ export const onAiChatBotAssistant = async (
                   questions: {
                     create: chatBotDomain.filterQuestions,
                   },
+
                   chatRoom: {
                     create: {},
                   },
@@ -162,7 +161,6 @@ export const onAiChatBotAssistant = async (
             },
           });
           if (newCustomer) {
-            console.log(newCustomer);
             const response = {
               role: "assistant",
               content: `Welcome aboard ${

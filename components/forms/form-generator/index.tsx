@@ -17,6 +17,7 @@ type Props = {
   lines?: number;
   form?: string;
   defaultValue?: string;
+  required?: boolean;
 };
 
 const FormGenerator = ({
@@ -31,6 +32,7 @@ const FormGenerator = ({
   label,
   options,
   lines,
+  required,
 }: Props) => {
   switch (inputType) {
     case "input":
@@ -44,6 +46,7 @@ const FormGenerator = ({
             form={form}
             defaultValue={defaultValue}
             {...register(name)}
+            required={required}
           />
           <ErrorMessage
             errors={errors}

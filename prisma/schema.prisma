@@ -125,7 +125,7 @@ model Bookings {
   id   String   @id @unique @default(uuid())
   date DateTime
   slot String
-  emai String
+  email String
 
   Customer   Customer? @relation(fields: [customerId], references: [id])
   customerId String?
