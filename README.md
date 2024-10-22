@@ -43,7 +43,7 @@ This AI-powered chatbot platform is designed to revolutionize customer interacti
 
 1. Clone the repository
    ```
-   git clone https://github.com/your-username/ai-chatbot-saas.git
+   git clone https://github.com/sankarkalla2/ai-email-marketing.git
    ```
 
 2. Install dependencies
@@ -120,10 +120,8 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-Your Name - [your.email@example.com](mailto:your.email@example.com)
+GowriSankarKalla - [gowrisankarkalla4@gmail.com](mailto:gowrisankarkalla4@gmail.com)
 
-Project Link: [https://github.com/your-username/ai-chatbot-saas](https://github.com/your-username/ai-chatbot-saas)
-````
 
 This updated README now accurately reflects the technology stack you're using:
 
